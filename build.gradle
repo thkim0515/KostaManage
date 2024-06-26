@@ -24,6 +24,11 @@ dependencies {
 
 	implementation 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation 'com.twilio.sdk:twilio:8.31.1'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }
 
 tasks.named('test') {
