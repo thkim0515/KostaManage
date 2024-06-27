@@ -35,6 +35,8 @@ public class UserService {
             user.setUserNickname(updatedUser.getUserNickname());
             user.setUserEmail(updatedUser.getUserEmail());
             user.setUserProfileImg(updatedUser.getUserProfileImg());
+            user.setUserAdmin(updatedUser.getUserAdmin());
+            user.setUserPoint(updatedUser.getUserPoint());
             return userRepository.save(user);
         } else {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");

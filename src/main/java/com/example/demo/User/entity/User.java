@@ -42,8 +42,11 @@ public class User {
     @Column(name = "userprofileimg")
     private String userProfileImg;
 
-    @Column(name = "useradmin", nullable = false, columnDefinition = "CHAR(1) DEFAULT '0'")
-    private String userAdmin;
+    @Column(name = "useradmin", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
+    private Integer userAdmin;
+
+    @Column(name = "userpoint", nullable = false, columnDefinition = "BIGINT DEFAULT 1000000000")
+    private Long userPoint;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;

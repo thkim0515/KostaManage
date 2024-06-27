@@ -18,6 +18,7 @@ public class MessageController {
     public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest) {
         try {
             String sid = twilioService.sendMessage(messageRequest.getTo(), messageRequest.getMessage());
+            System.out.println(messageRequest);
             return ResponseEntity.ok("Message sent with SID: " + sid);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Failed to send message: " + e.getMessage());
