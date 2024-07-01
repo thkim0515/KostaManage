@@ -6,6 +6,7 @@ import com.example.demo.User.entity.User;
 import com.example.demo.User.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,16 +20,19 @@ public class BoardService {
         this.userRepository = userRepository;
     }
 
-    public Board createBoard(String title, String content, Integer userId) {
+    public Board createBoard(String title, String content, Board.PostType type, Integer userId, Integer cohortId) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             Board board = Board.builder()
                     .title(title)
                     .content(content)
+                    .type(type)
                     .user(user)
+                    .cohortId(cohortId)
                     .views(0)
                     .likes(0)
+                    .postDate(LocalDateTime.now())
                     .build();
             return boardRepository.save(board);
         } else {

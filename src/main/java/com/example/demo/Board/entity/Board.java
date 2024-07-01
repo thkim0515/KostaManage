@@ -18,8 +18,8 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
-    private Integer boardId;
+    @Column(name = "post_id")
+    private Integer postId;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -27,9 +27,19 @@ public class Board {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private PostType type;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(name = "cohort_id", nullable = false)
+    private Integer cohortId;
+
+    @Column(name = "post_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime postDate;
 
     @Column(name = "views", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer views = 0;
@@ -47,10 +57,21 @@ public class Board {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        if (postDate == null) {
+            postDate = LocalDateTime.now();
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
+    }
+
+    public enum PostType {
+        DailyLesson,
+        Congratulations,
+        Announcement,
+        Complaint,
+        QnA
     }
 }

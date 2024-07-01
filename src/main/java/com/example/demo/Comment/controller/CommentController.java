@@ -20,14 +20,9 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/create")
     public Comment createComment(@RequestBody Comment comment) {
-        System.out.println(comment);
-        
-        // 부모 댓글 여부
-        Integer parentId = comment.getParent() != null ? comment.getParent().getCommentId() : null;
-        
         return commentService.createComment(
-                comment.getBoard().getBoardId(),
-                comment.getUser().getId(),
+                comment.getBoard().getPostId(),
+                comment.getUser().getUserId(),
                 comment.getContent(),
                 comment.getParent() != null ? comment.getParent().getCommentId() : null
         );
