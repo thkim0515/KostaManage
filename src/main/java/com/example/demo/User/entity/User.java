@@ -6,10 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name="user")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,35 +17,47 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer id;
+    private Integer userId;
 
-    @Column(name = "userid", nullable = false)
-    private String userId;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "userpassword", nullable = false)
-    private String userPassword;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    @Column(name = "username", nullable = false)
-    private String userName;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "usernickname", nullable = false)
-    private String userNickname;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-    @Column(name = "useremail", nullable = false, unique = true)
-    private String userEmail;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
-    @Column(name = "userphone")
-    private String userPhone;
+    @Column(name = "cohort_id")
+    private Integer cohortId;
 
-    @Column(name = "userprofileimg")
-    private String userProfileImg;
+    @Column(name = "assigned_cohort")
+    private Integer assignedCohort;
 
-    @Column(name = "useradmin", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
-    private Integer userAdmin;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "approval_status", nullable = false, columnDefinition = "ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'")
+    private ApprovalStatus approvalStatus;
 
-    @Column(name = "userpoint", nullable = false, columnDefinition = "BIGINT DEFAULT 1000000000")
-    private Long userPoint;
+    @Column(name = "profileimg", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'basicprofileimg.jpg'")
+    private String profileImg;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
+    public enum Role {
+        Student,
+        Instructor,
+        Researcher,
+        Admin
+    }
+
+    public enum ApprovalStatus {
+        Pending,
+        Approved,
+        Rejected
+    }
 }
