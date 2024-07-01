@@ -37,4 +37,5 @@ out/
 .vscode/
 
 ### Properties ###
+# application.properties를 무시하도록 설정
 application.properties

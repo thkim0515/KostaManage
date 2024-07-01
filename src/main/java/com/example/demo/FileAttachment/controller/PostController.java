@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.FileAttachment.controller;
 
 import com.example.demo.FileAttachment.entity.FileAttachment;
 import com.example.demo.FileAttachment.repository.FileAttachmentRepository;
