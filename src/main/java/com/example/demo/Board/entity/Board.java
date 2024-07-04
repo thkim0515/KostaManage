@@ -27,9 +27,8 @@ public class Board {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private PostType type;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -65,13 +64,5 @@ public class Board {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public enum PostType {
-        DailyLesson,
-        Congratulations,
-        Announcement,
-        Complaint,
-        QnA
     }
 }

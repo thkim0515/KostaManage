@@ -1,5 +1,6 @@
 package com.example.demo.Comment.controller;
 
+import com.example.demo.Comment.dto.CommentResponseDto;
 import com.example.demo.Comment.entity.Comment;
 import com.example.demo.Comment.service.CommentService;
 import org.springframework.web.bind.annotation.*;
@@ -19,31 +20,39 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/create")
-    public Comment createComment(@RequestBody Comment comment) {
-        return commentService.createComment(
+    public CommentResponseDto createComment(@RequestBody Comment comment) {
+        Comment savedComment = commentService.createComment(
                 comment.getBoard().getPostId(),
                 comment.getUser().getUserId(),
                 comment.getContent(),
                 comment.getParent() != null ? comment.getParent().getCommentId() : null
         );
+        return commentService.convertToDto(savedComment);
     }
 
     // 특정 댓글 조회
     @GetMapping("/get/{id}")
-    public Optional<Comment> getCommentById(@PathVariable Integer id) {
+    public Optional<CommentResponseDto> getCommentById(@PathVariable Integer id) {
         return commentService.getCommentById(id);
     }
 
     // 모든 댓글 조회
     @GetMapping("/all")
-    public List<Comment> getAllComments() {
+    public List<CommentResponseDto> getAllComments() {
         return commentService.getAllComments();
+    }
+
+    // 특정 게시물에 속하는 모든 댓글 조회
+    @GetMapping("/board/{boardId}")
+    public List<CommentResponseDto> getCommentsByBoardId(@PathVariable Integer boardId) {
+        return commentService.getCommentsByBoardId(boardId);
     }
 
     // 댓글 수정
     @PutMapping("/update/{id}")
-    public Comment updateComment(@PathVariable Integer id, @RequestBody Comment comment) {
-        return commentService.updateComment(id, comment.getContent());
+    public CommentResponseDto updateComment(@PathVariable Integer id, @RequestBody Comment comment) {
+        Comment updatedComment = commentService.updateComment(id, comment.getContent());
+        return commentService.convertToDto(updatedComment);
     }
 
     // 댓글 삭제

@@ -1,15 +1,19 @@
 package com.example.demo.Comment.service;
 
+import com.example.demo.Board.dto.BoardDto;
+import com.example.demo.Comment.dto.CommentResponseDto;
 import com.example.demo.Comment.entity.Comment;
 import com.example.demo.Comment.repository.CommentRepository;
 import com.example.demo.Board.entity.Board;
 import com.example.demo.Board.repository.BoardRepository;
+import com.example.demo.User.dto.UserDto;
 import com.example.demo.User.entity.User;
 import com.example.demo.User.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
@@ -24,22 +28,15 @@ public class CommentService {
     }
 
     public Comment createComment(Integer boardId, Integer userId, String content, Integer parentId) {
-        Optional<Board> boardOpt = boardRepository.findById(boardId);
-        Optional<User> userOpt = userRepository.findById(userId);
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        if (!boardOpt.isPresent()) {
-            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
-        }
-
-        if (!userOpt.isPresent()) {
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
-
-        Board board = boardOpt.get();
-        User user = userOpt.get();
         Comment parent = null;
         if (parentId != null) {
-            parent = commentRepository.findById(parentId).orElse(null);
+            parent = commentRepository.findById(parentId)
+                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글을 찾을 수 없습니다."));
         }
 
         Comment comment = Comment.builder()
@@ -52,27 +49,54 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Optional<Comment> getCommentById(Integer id) {
-        return commentRepository.findById(id);
+    public Optional<CommentResponseDto> getCommentById(Integer id) {
+        return commentRepository.findById(id).map(this::convertToDto);
     }
 
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
+    public List<CommentResponseDto> getAllComments() {
+        return commentRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    public List<CommentResponseDto> getCommentsByBoardId(Integer boardId) {
+        return commentRepository.findByBoard_PostId(boardId).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public Comment updateComment(Integer id, String content) {
-        Optional<Comment> commentOpt = commentRepository.findById(id);
-        if (commentOpt.isPresent()) {
-            Comment comment = commentOpt.get();
-            comment.setContent(content);
-            return commentRepository.save(comment);
-        } else {
-            throw new IllegalArgumentException("댓글을 찾을 수 없습니다.");
-        }
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        comment.setContent(content);
+        return commentRepository.save(comment);
     }
 
     public void deleteComment(Integer id) {
-        Optional<Comment> commentOpt = commentRepository.findById(id);
-        commentOpt.ifPresent(commentRepository::delete);
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        commentRepository.delete(comment);
+    }
+
+    public CommentResponseDto convertToDto(Comment comment) {
+        BoardDto boardDto = new BoardDto(
+                comment.getBoard().getPostId(),
+                comment.getBoard().getTitle(),
+                comment.getBoard().getContent(),
+                comment.getBoard().getType()
+        );
+
+        UserDto userDto = new UserDto(
+                comment.getUser().getUserId(),
+                comment.getUser().getName(),
+                comment.getUser().getEmail(),
+                comment.getUser().getProfileImg()
+        );
+
+        CommentResponseDto parentDto = comment.getParent() != null ? convertToDto(comment.getParent()) : null;
+
+        return new CommentResponseDto(
+                comment.getCommentId(),
+                boardDto,
+                userDto,
+                comment.getContent(),
+                parentDto
+        );
     }
 }

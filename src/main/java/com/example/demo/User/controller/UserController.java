@@ -4,6 +4,7 @@ import com.example.demo.User.entity.User;
 import com.example.demo.User.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +33,12 @@ public class UserController {
     @PutMapping("/update/{user_id}")
     public User updateUser(@PathVariable Integer user_id, @RequestBody User user) {
         return userService.updateUser(user_id, user);
+    }
+
+    // 모든 회원 조회
+    @GetMapping("/all")
+    public List<User> getAllUsers() {
+        return userService.findAllUsers();
     }
 
     // 회원 삭제

@@ -4,6 +4,7 @@ import com.example.demo.User.entity.User;
 import com.example.demo.User.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,5 +52,10 @@ public class UserService {
     public void deleteUser(Integer userId) {
         Optional<User> userOpt = userRepository.findById(userId);
         userOpt.ifPresent(userRepository::delete);
+    }
+
+    // 모든 회원 조회 메서드 추가
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 }

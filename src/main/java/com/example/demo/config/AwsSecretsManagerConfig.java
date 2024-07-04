@@ -20,6 +20,7 @@ public class AwsSecretsManagerConfig  {
 
     @Value("${cloud.aws.credentials.secretKey}")
     private String secretKey;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public Map<String, String> getSecret() {

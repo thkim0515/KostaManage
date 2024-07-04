@@ -20,7 +20,7 @@ public class BoardService {
         this.userRepository = userRepository;
     }
 
-    public Board createBoard(String title, String content, Board.PostType type, Integer userId, Integer cohortId) {
+    public Board createBoard(String title, String content, String type, Integer userId, Integer cohortId) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
             User user = userOpt.get();

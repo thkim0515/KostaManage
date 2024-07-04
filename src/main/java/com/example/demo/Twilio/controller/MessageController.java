@@ -19,9 +19,9 @@ public class MessageController {
         try {
             String sid = twilioService.sendMessage(messageRequest.getTo(), messageRequest.getMessage());
             System.out.println(messageRequest);
-            return ResponseEntity.ok("Message sent with SID: " + sid);
+            return ResponseEntity.ok("메세지 전송완료. 대상SID: " + sid);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to send message: " + e.getMessage());
+            return ResponseEntity.status(500).body("메세지 전송 실패: " + e.getMessage());
         }
     }
 

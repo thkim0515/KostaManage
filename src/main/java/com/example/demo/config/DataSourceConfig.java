@@ -66,13 +66,14 @@ public class DataSourceConfig {
                 secrets.get("twilio.phoneNumber")
         );
     }
-//
-//    @Bean
-//    public S3Config s3Config(Map<String, String> secrets) {
-//
-//        return new S3Config(
-//                secrets.get("cloud.aws.region.static"),
-//                secrets.get("cloud.aws.s3.bucket")
-//        );
-//    }
+
+    @Bean
+    public S3Config s3Config(Map<String, String> secrets) {
+
+        return new S3Config(
+                secrets.get("cloud.aws.region.static"),
+                secrets.get("cloud.aws.s3.bucket")
+        );
+    }
+
 }

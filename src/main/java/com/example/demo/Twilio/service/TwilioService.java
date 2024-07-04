@@ -13,15 +13,6 @@ import javax.annotation.PostConstruct;
 
 @Service
 public class TwilioService {
-//    @Value("${twilio.accountSid}")
-//    private String accountSid;
-//
-//    @Value("${twilio.authToken}")
-//    private String authToken;
-//
-//    @Value("${twilio.phoneNumber}")
-//    private String fromPhoneNumber;
-
     private final TwilioConfig twilioConfig;
 
     @Autowired
@@ -35,9 +26,16 @@ public class TwilioService {
     }
 
     public String sendMessage(String to, String message) {
-        PhoneNumber toNumber = new PhoneNumber(to.replaceFirst("^0", "+82"));
+        PhoneNumber toNumber = convertPhoneNumber(to);
         PhoneNumber fromNumber = new PhoneNumber(twilioConfig.getPhoneNumber());
         Message createdMessage = Message.creator(toNumber, fromNumber, message).create();
         return createdMessage.getSid();
+    }
+
+    private PhoneNumber convertPhoneNumber(String to) {
+        if (to.startsWith("0")) {
+            to = "+82" + to.substring(1);
+        }
+        return new PhoneNumber(to);
     }
 }
