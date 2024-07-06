@@ -58,9 +58,10 @@ dependencies {
 	// AWS SDK for Auth (AWS 인증 및 권한 관리를 위한 SDK)
 	implementation 'software.amazon.awssdk:auth:2.17.89'
 
-
-
 	implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 }
 
 tasks.named('test') {

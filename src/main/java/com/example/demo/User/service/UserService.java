@@ -2,6 +2,8 @@ package com.example.demo.User.service;
 
 import com.example.demo.User.entity.User;
 import com.example.demo.User.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +12,12 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User register(User user) {
@@ -23,6 +28,7 @@ public class UserService {
         if (user.getProfileImg() == null) {
             user.setProfileImg("basicprofileimg.jpg");
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
         return userRepository.save(user);
     }
 
@@ -36,7 +42,7 @@ public class UserService {
             User user = userOpt.get();
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword())); // 비밀번호 암호화
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setRole(updatedUser.getRole());
             user.setCohortId(updatedUser.getCohortId());
