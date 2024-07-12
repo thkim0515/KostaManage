@@ -9,7 +9,6 @@ public class S3Config {
         this.bucketName = bucketName;
     }
 
-    // Getters
     public String getRegion() {
         return region;
     }

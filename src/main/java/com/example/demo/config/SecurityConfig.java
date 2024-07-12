@@ -26,9 +26,14 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/users/**","/cohorts/**").permitAll() // 회원가입과 로그인 엔드포인트 허용
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll() // 모든 요청 허용
                 );
+//        http.csrf(csrf -> csrf.disable()) // CSRF 비활성화
+//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/auth/**", "/users/**", "/cohorts/**", "/register/**", "/posts/**","/comments/**","/boards/**").permitAll() // 회원가입과 로그인 엔드포인트 허용
+//                        .anyRequest().authenticated()
+//                );
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

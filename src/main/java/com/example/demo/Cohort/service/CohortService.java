@@ -24,7 +24,7 @@ public class CohortService {
     }
 
     public List<Cohort> getAllCohorts() {
-        return cohortRepository.findAll();
+        return cohortRepository.findAllActive();
     }
 
     public Cohort updateCohort(Integer id, Cohort updatedCohort) {
@@ -46,5 +46,16 @@ public class CohortService {
     public void deleteCohort(Integer id) {
         Optional<Cohort> cohortOpt = cohortRepository.findById(id);
         cohortOpt.ifPresent(cohortRepository::delete);
+    }
+
+    public void softDeleteCohort(Integer id) {
+        Optional<Cohort> cohortOpt = cohortRepository.findById(id);
+        if (cohortOpt.isPresent()) {
+            Cohort cohort = cohortOpt.get();
+            cohort.setIsDeleted(true);
+            cohortRepository.save(cohort);
+        } else {
+            throw new IllegalArgumentException("Cohort not found.");
+        }
     }
 }

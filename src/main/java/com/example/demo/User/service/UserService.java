@@ -21,14 +21,13 @@ public class UserService {
     }
 
     public User register(User user) {
-        // user.getUserId()가 null이 아닌 경우만 존재 여부 확인
         if (user.getUserId() != null && userRepository.existsById(user.getUserId())) {
             throw new IllegalArgumentException("UserId가 이미 존재합니다.");
         }
         if (user.getProfileImg() == null) {
             user.setProfileImg("basicprofileimg.jpg");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // 비밀번호 암호화
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -42,7 +41,7 @@ public class UserService {
             User user = userOpt.get();
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
-            user.setPassword(passwordEncoder.encode(updatedUser.getPassword())); // 비밀번호 암호화
+            user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setRole(updatedUser.getRole());
             user.setCohortId(updatedUser.getCohortId());
@@ -60,8 +59,22 @@ public class UserService {
         userOpt.ifPresent(userRepository::delete);
     }
 
-    // 모든 회원 조회 메서드 추가
+    public void softDeleteUser(Integer userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setIsDeleted(true);
+            userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+    }
+
     public List<User> findAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAllActive();
+    }
+
+    public List<User> findUsersByCohortId(Integer cohortId) {
+        return userRepository.findByCohortId(cohortId);
     }
 }

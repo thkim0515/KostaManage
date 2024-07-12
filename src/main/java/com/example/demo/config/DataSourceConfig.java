@@ -1,32 +1,3 @@
-//package com.example.demo.config;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//
-//import javax.sql.DataSource;
-//import org.springframework.boot.jdbc.DataSourceBuilder;
-//import java.util.Map;
-//
-//@Configuration
-//public class DataSourceConfig {
-//
-//    @Autowired
-//    private AwsSecretsManagerConfig secretManagerUtil;
-//
-//    @Bean
-//    public DataSource dataSource() {
-//        Map<String, String> secret = secretManagerUtil.getSecret();
-//
-//        return DataSourceBuilder.create()
-//                .url("jdbc:mysql://finaldatabase.cha4igmusvsy.ap-northeast-2.rds.amazonaws.com:3306/KostamanageDB")
-//                .username(secret.get("sql_id"))
-//                .password(secret.get("sql_password"))
-//                .driverClassName("com.mysql.cj.jdbc.Driver")
-//                .build();
-//    }
-//}
-
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +44,15 @@ public class DataSourceConfig {
         return new S3Config(
                 secrets.get("cloud.aws.region.static"),
                 secrets.get("cloud.aws.s3.bucket")
+        );
+    }
+
+    @Bean
+    public JWTConfig jwtToken(Map<String, String> secrets){
+
+        return new JWTConfig(
+                secrets.get("jwt.secret"),
+                Integer.parseInt(secrets.get("jwt.expiration"))
         );
     }
 

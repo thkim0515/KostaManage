@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/calendar")
+@RequestMapping("/calendar")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CurriculumCalendarController {
 

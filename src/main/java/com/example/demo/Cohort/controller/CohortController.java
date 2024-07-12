@@ -46,4 +46,10 @@ public class CohortController {
     public void deleteCohort(@PathVariable Integer id) {
         cohortService.deleteCohort(id);
     }
+
+    // Cohort 소프트 딜리트
+    @PutMapping("/soft-delete/{id}")
+    public void softDeleteCohort(@PathVariable Integer id) {
+        cohortService.softDeleteCohort(id);
+    }
 }

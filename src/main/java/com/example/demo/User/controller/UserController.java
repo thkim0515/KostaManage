@@ -46,4 +46,16 @@ public class UserController {
     public void deleteUser(@PathVariable Integer user_id) {
         userService.deleteUser(user_id);
     }
+
+    // 회원 소프트 딜리트
+    @PutMapping("/soft-delete/{user_id}")
+    public void softDeleteUser(@PathVariable Integer user_id) {
+        userService.softDeleteUser(user_id);
+    }
+
+    // 특정 기수에 속한 회원 조회
+    @GetMapping("/cohort/{cohort_id}")
+    public List<User> getUsersByCohortId(@PathVariable Integer cohort_id) {
+        return userService.findUsersByCohortId(cohort_id);
+    }
 }

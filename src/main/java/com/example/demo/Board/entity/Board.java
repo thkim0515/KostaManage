@@ -37,13 +37,12 @@ public class Board {
     @Column(name = "cohort_id", nullable = false)
     private Integer cohortId;
 
-    @Column(name = "post_date", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime postDate;
-
     @Column(name = "views", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Builder.Default
     private Integer views = 0;
 
     @Column(name = "likes", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Builder.Default
     private Integer likes = 0;
 
     @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -52,13 +51,14 @@ public class Board {
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
+    @Column(name = "isdelete", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (postDate == null) {
-            postDate = LocalDateTime.now();
-        }
     }
 
     @PreUpdate

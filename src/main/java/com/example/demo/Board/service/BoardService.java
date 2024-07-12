@@ -1,14 +1,16 @@
 package com.example.demo.Board.service;
 
+import com.example.demo.Board.dto.BoardResponseDto;
 import com.example.demo.Board.entity.Board;
 import com.example.demo.Board.repository.BoardRepository;
+import com.example.demo.User.dto.UserDto;
 import com.example.demo.User.entity.User;
 import com.example.demo.User.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -32,7 +34,7 @@ public class BoardService {
                     .cohortId(cohortId)
                     .views(0)
                     .likes(0)
-                    .postDate(LocalDateTime.now())
+                    .isDeleted(false)
                     .build();
             return boardRepository.save(board);
         } else {
@@ -44,8 +46,8 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
-    public List<Board> getAllBoards() {
-        return boardRepository.findAll();
+    public List<BoardResponseDto> getAllBoards() {
+        return boardRepository.findAllActive().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public Board updateBoard(Integer id, String title, String content) {
@@ -63,5 +65,39 @@ public class BoardService {
     public void deleteBoard(Integer id) {
         Optional<Board> boardOpt = boardRepository.findById(id);
         boardOpt.ifPresent(boardRepository::delete);
+    }
+
+    public void softDeleteBoard(Integer id) {
+        Optional<Board> boardOpt = boardRepository.findById(id);
+        if (boardOpt.isPresent()) {
+            Board board = boardOpt.get();
+            board.setIsDeleted(true);
+            boardRepository.save(board);
+        } else {
+            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+        }
+    }
+
+    public BoardResponseDto convertToDto(Board board) {
+        UserDto userDto = new UserDto(
+                board.getUser().getUserId(),
+                board.getUser().getName(),
+                board.getUser().getEmail(),
+                board.getUser().getProfileImg()
+        );
+
+        return new BoardResponseDto(
+                board.getPostId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getType(),
+                userDto,
+                board.getCohortId(),
+                board.getViews(),
+                board.getLikes(),
+                board.getCreatedAt().toString(),
+                board.getUpdatedAt().toString(),
+                board.getIsDeleted()
+        );
     }
 }

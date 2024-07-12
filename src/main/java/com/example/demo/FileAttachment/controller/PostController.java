@@ -3,6 +3,8 @@ package com.example.demo.FileAttachment.controller;
 import com.example.demo.FileAttachment.entity.FileAttachment;
 import com.example.demo.FileAttachment.repository.FileAttachmentRepository;
 import com.example.demo.FileAttachment.service.S3Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostController {
 
+    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+
     @Autowired
     private S3Service s3Service;
 
@@ -24,11 +28,12 @@ public class PostController {
     private FileAttachmentRepository fileAttachmentRepository;
 
     @PostMapping
-    public List<String> uploadPost(@RequestParam("title") String title,
-                                   @RequestParam("content") String content,
-                                   @RequestParam("post_date") String postDate,
-                                   @RequestParam("board_id") Long boardId,
+    public List<String> uploadPost(@RequestParam("board_id") Long boardId,
                                    @RequestParam("files") List<MultipartFile> files) {
+
+        logger.info("Received uploadPost request with data: board_id={}, files={}",
+                boardId, files.stream().map(MultipartFile::getOriginalFilename).collect(Collectors.toList()));
+
         try {
             List<String> filePaths = files.stream().map(file -> {
                 try {

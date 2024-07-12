@@ -60,4 +60,10 @@ public class CommentController {
     public void deleteComment(@PathVariable Integer id) {
         commentService.deleteComment(id);
     }
+
+    // 댓글 소프트 삭제
+    @PutMapping("/soft-delete/{id}")
+    public void softDeleteComment(@PathVariable Integer id) {
+        commentService.softDeleteComment(id);
+    }
 }

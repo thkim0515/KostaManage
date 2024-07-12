@@ -43,6 +43,10 @@ public class Comment {
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt;
 
+    @Column(name = "isdelete", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Builder.Default
+    private Boolean isDeleted = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

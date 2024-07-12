@@ -1,6 +1,5 @@
 package com.example.demo.Comment.service;
 
-import com.example.demo.Board.dto.BoardDto;
 import com.example.demo.Comment.dto.CommentResponseDto;
 import com.example.demo.Comment.entity.Comment;
 import com.example.demo.Comment.repository.CommentRepository;
@@ -44,6 +43,7 @@ public class CommentService {
                 .user(user)
                 .content(content)
                 .parent(parent)
+                .isDeleted(false)
                 .build();
 
         return commentRepository.save(comment);
@@ -54,7 +54,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getAllComments() {
-        return commentRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+        return commentRepository.findAllActive().stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public List<CommentResponseDto> getCommentsByBoardId(Integer boardId) {
@@ -74,14 +74,14 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public CommentResponseDto convertToDto(Comment comment) {
-        BoardDto boardDto = new BoardDto(
-                comment.getBoard().getPostId(),
-                comment.getBoard().getTitle(),
-                comment.getBoard().getContent(),
-                comment.getBoard().getType()
-        );
+    public void softDeleteComment(Integer id) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        comment.setIsDeleted(true);
+        commentRepository.save(comment);
+    }
 
+    public CommentResponseDto convertToDto(Comment comment) {
         UserDto userDto = new UserDto(
                 comment.getUser().getUserId(),
                 comment.getUser().getName(),
@@ -93,10 +93,11 @@ public class CommentService {
 
         return new CommentResponseDto(
                 comment.getCommentId(),
-                boardDto,
+                comment.getBoard().getPostId(),
                 userDto,
                 comment.getContent(),
-                parentDto
+                parentDto,
+                comment.getCreatedAt()
         );
     }
 }

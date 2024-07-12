@@ -38,4 +38,7 @@ public class Cohort {
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
+
+    @Column(name = "isdelete", nullable = false)
+    private Boolean isDeleted = false;
 }

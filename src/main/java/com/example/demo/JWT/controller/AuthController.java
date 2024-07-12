@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
 
     @Autowired

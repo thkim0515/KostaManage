@@ -48,6 +48,9 @@ public class User {
     @Column(name = "profileimg", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'basicprofileimg.jpg'")
     private String profileImg;
 
+    @Column(name = "isdelete", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean isDeleted = false; // 필드명은 isDeleted, 컬럼명은 isdelete
+
     public enum Role {
         Student,
         Instructor,
