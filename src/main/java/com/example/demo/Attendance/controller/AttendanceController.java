@@ -27,7 +27,6 @@ public class AttendanceController {
 
     @PostMapping
     public Attendance createAttendance(@RequestBody Attendance attendance) {
-        // Check if there is already an attendance record for the given date and user
         Optional<Attendance> existingAttendance = attendanceService.findByDateAndUser(attendance.getDate(), attendance.getUser());
         if (existingAttendance.isPresent()) {
             Attendance existing = existingAttendance.get();

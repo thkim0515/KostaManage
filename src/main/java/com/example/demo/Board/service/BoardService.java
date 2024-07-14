@@ -46,6 +46,11 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
+    public List<BoardResponseDto> getBoardsByType(String type) {
+        List<Board> boards = boardRepository.findByTypeAndIsDeletedFalse(type);
+        return boards.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
     public List<BoardResponseDto> getAllBoards() {
         return boardRepository.findAllActive().stream().map(this::convertToDto).collect(Collectors.toList());
     }

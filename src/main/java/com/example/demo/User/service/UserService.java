@@ -35,6 +35,10 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public Optional<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+    
     public User updateUser(Integer userId, User updatedUser) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {

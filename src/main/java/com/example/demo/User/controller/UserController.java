@@ -23,8 +23,14 @@ public class UserController {
         return userService.register(user);
     }
 
-    // 회원 정보 조회
-    @GetMapping("/get/{user_id}")
+    // 이름으로 회원 정보 조회
+    @GetMapping("/name/{name}")
+    public Optional<User> getUserByName(@PathVariable String name) {
+        return userService.findByName(name);
+    }
+
+    // ID로 회원 정보 조회
+    @GetMapping("/id/{user_id}")
     public Optional<User> getUserById(@PathVariable Integer user_id) {
         return userService.findById(user_id);
     }

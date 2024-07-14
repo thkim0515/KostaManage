@@ -29,6 +29,11 @@ public class BoardController {
         return boardService.getBoardById(id).map(boardService::convertToDto);
     }
 
+    @GetMapping("/type/{type}")
+    public List<BoardResponseDto> getBoardsByType(@PathVariable String type) {
+        return boardService.getBoardsByType(type);
+    }
+
     @GetMapping("/all")
     public List<BoardResponseDto> getAllBoards() {
         return boardService.getAllBoards();

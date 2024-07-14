@@ -49,7 +49,8 @@ public class User {
     private String profileImg;
 
     @Column(name = "isdelete", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
-    private Boolean isDeleted = false; // 필드명은 isDeleted, 컬럼명은 isdelete
+    @Builder.Default
+    private Boolean isDeleted = false;
 
     public enum Role {
         Student,
