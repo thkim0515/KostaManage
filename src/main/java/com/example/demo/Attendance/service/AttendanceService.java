@@ -22,6 +22,10 @@ public class AttendanceService {
         return attendanceRepository.findById(id);
     }
 
+    public List<Attendance> findByUser(User user) {
+        return attendanceRepository.findByUser(user);
+    }
+
     public Optional<Attendance> findByDateAndUser(Date date, User user) {
         return attendanceRepository.findByDateAndUser(date, user);
     }

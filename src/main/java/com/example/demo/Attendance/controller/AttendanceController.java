@@ -2,6 +2,8 @@ package com.example.demo.Attendance.controller;
 
 import com.example.demo.Attendance.entity.Attendance;
 import com.example.demo.Attendance.service.AttendanceService;
+import com.example.demo.User.entity.User;
+import com.example.demo.User.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public List<Attendance> getAllAttendances() {
         return attendanceService.findAll();
@@ -23,6 +28,12 @@ public class AttendanceController {
     @GetMapping("/{id}")
     public Optional<Attendance> getAttendanceById(@PathVariable Integer id) {
         return attendanceService.findById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Attendance> getAttendanceByUserId(@PathVariable Integer userId) {
+        Optional<User> user = userService.findById(userId);
+        return user.map(attendanceService::findByUser).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @PostMapping

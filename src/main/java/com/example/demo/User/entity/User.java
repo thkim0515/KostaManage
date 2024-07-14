@@ -1,5 +1,6 @@
 package com.example.demo.User.entity;
 
+import com.example.demo.Cohort.entity.Cohort;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,11 +36,13 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "cohort_id")
-    private Integer cohortId;
+    @ManyToOne
+    @JoinColumn(name = "cohort_id", referencedColumnName = "cohort_id")
+    private Cohort cohort;
 
-    @Column(name = "assigned_cohort")
-    private Integer assignedCohort;
+    @ManyToOne
+    @JoinColumn(name = "assigned_cohort", referencedColumnName = "cohort_id")
+    private Cohort assignedCohort;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "approval_status", nullable = false, columnDefinition = "ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending'")

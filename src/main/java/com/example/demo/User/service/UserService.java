@@ -36,9 +36,9 @@ public class UserService {
     }
 
     public Optional<User> findByName(String name) {
-        return userRepository.findByName(name);
+        return userRepository.findByNameWithCohort(name);
     }
-    
+
     public User updateUser(Integer userId, User updatedUser) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isPresent()) {
@@ -48,7 +48,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             user.setPhoneNumber(updatedUser.getPhoneNumber());
             user.setRole(updatedUser.getRole());
-            user.setCohortId(updatedUser.getCohortId());
+            user.setCohort(updatedUser.getCohort());
             user.setAssignedCohort(updatedUser.getAssignedCohort());
             user.setApprovalStatus(updatedUser.getApprovalStatus());
             user.setProfileImg(updatedUser.getProfileImg());

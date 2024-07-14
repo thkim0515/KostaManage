@@ -23,7 +23,7 @@ public class UserController {
         return userService.register(user);
     }
 
-    // 이름으로 회원 정보 조회
+    // 이름으로 회원 정보 조회 (기수 정보 포함)
     @GetMapping("/name/{name}")
     public Optional<User> getUserByName(@PathVariable String name) {
         return userService.findByName(name);
