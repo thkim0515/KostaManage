@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -56,6 +58,18 @@ public class PostController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Post upload failed!");
+        }
+    }
+
+    @PostMapping("/upload")
+    public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String url = s3Service.uploadFile(file);
+            Map<String, String> response = new HashMap<>();
+            response.put("url", url);
+            return response;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file", e);
         }
     }
 }
